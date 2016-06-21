@@ -17,8 +17,8 @@ controller.setupWebserver(process.env.port, (err, webserver) => {
 });
 
 // Set up middleware
-controller.middleware.receive.use(function(bot, msg, next) {
-    console.log('middleware', msg.text)
+controller.middleware.receive.use((bot, msg, next) => {
+
     if( msg.type === 'slash_command' ) {
 
         const command = msg.text.split(' ');
