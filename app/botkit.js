@@ -17,11 +17,11 @@ controller.setupWebserver(process.env.port, (err, webserver) => {
 
 // Set up middleware
 controller.middleware.receive.use(function(bot, msg, next) {
-    
+    console.log('middleware', msg.text)
     if( msg.type === 'slash_command' ) {
 
         const command = msg.text.split(' ');
-        msg.subcommand = command[0];
+        msg.subcommand = command[0].toLocaleLowerCase();
 
         
         if( msg.text.split(' ').length > 1 ) {

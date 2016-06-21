@@ -56,7 +56,7 @@ module.exports = (bot, msg) => {
 
     })
     .then(result => {
-        bot.replyPublicDelayed(msg, 'The expression *' + expression + '* equals *' + result + '*');
+        bot.replyPrivateDelayed(msg, 'The expression *' + expression + '* equals *' + result + '*');
     })
     .catch(err => {
         bot.replyPrivateDelayed(msg, err);
