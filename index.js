@@ -23,7 +23,6 @@ command=/weather
 text=94070
 response_url=https://hooks.slack.com/commands/1234/5678
 */
-  console.log(req.params)
   const command = req.params.text.split(' ');
 
   switch (command[0]) {
@@ -31,8 +30,10 @@ response_url=https://hooks.slack.com/commands/1234/5678
     case 'calculate':
         require('./plugins/calculate')(req, res, next);
         break;
+    case 'help':
+        break;
     default:
-        res.send('Whoops, I can\'t handle that request :cry:')
+        res.send('Whoops, I can\'t handle that request :cry:\mTry /slaq help')
 
   };
 

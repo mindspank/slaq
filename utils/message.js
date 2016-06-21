@@ -1,25 +1,42 @@
 const extend = require('extend');
 
-var base = {
-    text: '',
-    mrkdwn: true,
-    attachments: []
-}
+const msg = (text) => {
 
-module.exports = {
-    inChannel: function(text) {
-        var msg = extend(base,{
-            text: text,
-            response_type: "in_channel"
-        });
+    var base = {
+        text: text || '',
+        response_type: 'ephemeral',
+        mrkdwn: true,
+        attachments: []        
+    };
 
-        return msg;
-    },
-    inPrivate: function(text) {
-        var msg = extend(base,{
-            text: text
-        });
-
-        return msg;      
+    return internal = {
+        getText: () => {
+            return base;
+        },
+        base: (text) => {
+            base.text = text;
+            return internal;
+        },
+        setText: (text) => {
+            base.attachment.push({
+                text: text
+            });
+            return internal;
+        },
+        removeText: (index) => {
+            base.attachments.splice(index, 1);
+            return internal;
+        },
+        inChannel: () => {
+            base.response_type = 'in_channel';
+            return internal;
+        },
+        inPrivate: () => {
+            base.response_type = 'ephemeral';
+            return internal;
+        }
     }
-}
+    
+};
+
+module.exports = msg;

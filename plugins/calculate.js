@@ -3,15 +3,11 @@
 const qsocks = require('qsocks');
 const config = require('../config');
 const Promise = require('bluebird');
+const msg = require('../utils/message');
 
-var isGuid;
 
-function findapp(d) {
-    if (isGuid) {
-        return d.qDocId === appid
-    } else {
-        return d.qTitle === appid
-    }
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
 }
 
 module.exports = function (req, res, next) {
@@ -37,9 +33,11 @@ module.exports = function (req, res, next) {
     })
     .then(conn => {
         const app = conn[1];
-        return app.checkExpression(expression).then(result => {
+        
+        return app.checkExpression(expression)
+        .then(result => {
             if (
-                result.qErrorMsg ||
+                !isBlank(result.qErrorMsg) ||
                 result.qBadFieldNames.length ||
                 result.qDangerousFieldNames.length
             ) {
@@ -48,23 +46,21 @@ module.exports = function (req, res, next) {
                 return app.evaluate(expression);
             }
         })
-            .then(result => {
-                app.connection.ws.terminate();
-                hub.then(hub => connection.ws.terminate());
+        .then(result => {
+            app.connection.ws.terminate();
+            hub.then(hub => connection.ws.terminate());
 
-                return result;
-            })
+            return result;
+        })
 
     })
     .then(result => {
-        res.send({
-            response_type: "in_channel",
-            text: 'The expression *' + expression + '* equals *' + result + '*',
-            mrkdwn: true
-        })
+        var text = msg('The expression *' + expression + '* equals *' + result + '*').inChannel().getText()
+        res.send(text);
     })
     .catch(err => {
-        res.send({ test: err })
+        var text = msg(err).inPrivate().getText();
+        res.send(text);
     }).done();
 
-}
+};
