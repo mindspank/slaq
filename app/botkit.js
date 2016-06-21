@@ -18,19 +18,22 @@ controller.setupWebserver(process.env.port, (err, webserver) => {
 // Set up middleware
 controller.middleware.receive.use(function(bot, msg, next) {
     
-    if(msg.type === 'slash_command' && msg.text) {
+    if( msg.type === 'slash_command' ) {
+
         const command = msg.text.split(' ');
         msg.subcommand = command[0];
 
+        
         if( msg.text.split(' ').length > 1 ) {
             msg.text = msg.text.split(' ');
-        }
+        };
 
     };
+    
     next();
+
 });
 
-// slash commands
-require('./commands');
+require('./commands')(controller);
 
 module.exports = controller;
