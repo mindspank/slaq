@@ -4,9 +4,10 @@ const controller = Botkit.slackbot({
     debug: true
 });
 
+// Start bot
 controller.spawn();
 
-//Fix for https://github.com/howdyai/botkit/issues/108
+// Fix for https://github.com/howdyai/botkit/issues/108
 controller.storage.teams.save({ id: process.env.slack_token, foo: "bar" }, (err) => {
     if (err) console.error(err);
 });
@@ -34,6 +35,7 @@ controller.middleware.receive.use(function(bot, msg, next) {
 
 });
 
+// Load up slash commands
 require('./commands')(controller);
 
 module.exports = controller;
